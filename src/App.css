@@ -11,7 +11,7 @@
 .app-container {
   display: flex;
   height: 100vh;
-  background-color: #f4f4f4;
+  background: #121225;
   overflow: hidden;
   transition: background-color 0.3s ease;
 }
@@ -34,8 +34,8 @@
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease-in-out;
-  background-color: #f5f5f5;
-  padding: 15px;
+  background: #121225;
+  padding: 20px;
   margin-left: var(--sidebar-width);
 }
 
@@ -56,10 +56,11 @@
   align-items: center;
   flex-grow: 1;
   font-size: 18px;
-  color: #555;
-  background-color: white;
+  color: #e0e0e0;
+  background: linear-gradient(to bottom, #3a3a6a, #2a2a5a);
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid #4a4a8a;
 }
 
 .app-container.dark .placeholder {

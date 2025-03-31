@@ -29,7 +29,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   onNewChat,
   chats,
   activeChatId,
-  onToggleChatSelect,
   onDdlContentChange,
   onFileUpload
 }) => {
@@ -70,7 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </label>
               <textarea 
                 id="ddl-content" 
-                placeholder="Enter DDL content..."
+                placeholder="  Enter DDL content..."
                 value={ddlContent}
                 onChange={handleDdlContentChange}
               ></textarea>
@@ -79,6 +78,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             <div className="sidebar-section upload-section">
               <label htmlFor="ddl-file" className="sidebar-label">
                 <FiUpload className="icon" /> Upload DDL File
+              </label>
+              <label htmlFor="ddl-file" className="file-input-label">
+                Click to Upload SQL File
               </label>
               <input 
                 type="file" 
@@ -105,17 +107,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <ul>
                     {chats.map((chat) => (
                       <li key={chat.id}>
-                        <input
-                          type="checkbox"
-                          checked={chat.selected || false}
-                          onChange={(e) => onToggleChatSelect(chat.id, e.target.checked)}
-                          className="chat-checkbox"
-                          aria-label={`Select ${chat.title}`}
-                          title={`Select ${chat.title}`}
-                        />
                         <button 
                           onClick={() => onSelectChat(chat.id)}
-                          className={chat.id === activeChatId ? 'active-chat' : ''}
+                          className={`chat-item ${chat.id === activeChatId ? 'active-chat' : ''}`}
                         >
                           {chat.title}
                         </button>
