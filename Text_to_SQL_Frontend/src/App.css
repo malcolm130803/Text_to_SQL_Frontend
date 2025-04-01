@@ -1,0 +1,170 @@
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Root container */
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background: #121225;
+  overflow: hidden;
+  position: relative;
+}
+
+.sidebar {
+  width: 300px;
+  height: 100vh;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, width 0.3s ease;
+  background: #121225;
+  position: relative;
+  z-index: 10;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.main-content {
+  flex: 1;
+  transition: margin-left 0.3s ease;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar-open {
+  margin-left: 300px;
+}
+
+.sidebar-collapsed {
+  margin-left: 70px;
+}
+
+.chat-interface-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-interface-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.chat-interface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.chat-input-container {
+  width: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+/* Dark theme styles */
+.app-container.dark {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+/* Sidebar width variables */
+:root {
+  --sidebar-width: 300px;
+  --sidebar-collapsed-width: 70px;
+}
+
+.app-container.dark .chat-interface,
+.app-container.dark .chat-messages,
+.app-container.dark .chat-input-container {
+  background-color: #16213e;
+}
+
+/* Placeholder when no chat is selected */
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 18px;
+  color: #e0e0e0;
+  background: linear-gradient(to bottom, #3a3a6a, #2a2a5a);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid #4a4a8a;
+}
+
+.app-container.dark .placeholder {
+  background-color: #0f3460;
+  color: #ffffff;
+}
+
+/* Remove animation styles not needed for our app */
+.logo, .card, .read-the-docs {
+  display: none;
+}
+
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  background: rgba(30, 30, 45, 0.9);
+  border: 1px solid #4a4a8a;
+  color: #e0e0e0;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ===== RESPONSIVE ENHANCEMENTS ===== */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .sidebar:not(.collapsed) {
+    width: 250px;
+  }
+  
+  .sidebar-open, 
+  .sidebar-collapsed {
+    margin-left: 0;
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .sidebar:not(.collapsed) {
+    width: 200px;
+  }
+}
