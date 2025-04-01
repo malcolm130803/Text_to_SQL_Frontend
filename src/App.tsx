@@ -133,28 +133,45 @@ const App: React.FC = () => {
 
   return (
     <div className={`app-container ${theme} w-full`}>
-     {/* <button 
-          className="mobile-menu-toggle w-[10%]"
+      {/* Mobile menu button - only shows on small screens */}
+      <button 
+        className="sm:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-gray-200 dark:bg-gray-700"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         ☰
-      </button> */}
-      <div className={`${isSidebarOpen? 'w-[30%]':'w-[10%]'}`}>
-      <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
-        onSelectChat={handleSelectChat}
-        onNewChat={handleNewChat}
-        chats={chats}
-        activeChatId={activeChatId}
-        onToggleChatSelect={handleToggleChatSelect}
-        onDdlContentChange={handleDdlContentChange}
-        onFileUpload={handleFileUpload}
-      />
+      </button>
+  
+      {/* Sidebar - responsive behavior */}
+      {/* {` */}
+        {/* ${isSidebarOpen ? 'w-full sm:w-1/4 lg:w-1/5' : 'w-0 sm:w-16 lg:w-20'} 
+        transition-all duration-300 ease-in-out
+        fixed sm:relative z-40 h-screen
+      `} */}
+      <div className={`
+        ${isSidebarOpen ? 'lg:w-[35%] xl:w-[18%]' : ' md:w-[8%] lg:w-[8%] xl:w-[4%]'} 
+        transition-all duration-300 ease-in-out
+        fixed sm:relative z-40 h-screen
+      `}>
+        <Sidebar
+          isOpen={isSidebarOpen}
+          toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+          onSelectChat={handleSelectChat}
+          onNewChat={handleNewChat}
+          chats={chats}
+          activeChatId={activeChatId}
+          onToggleChatSelect={handleToggleChatSelect}
+          onDdlContentChange={handleDdlContentChange}
+          onFileUpload={handleFileUpload}
+        />
       </div>
-
-      <main className={`main-content ${isSidebarOpen ? 'sidebar-open w-[70%]' : 'sidebar-collapsed w-[90%]'}`}>
-        <div className="chat-interface-wrapper">
+  
+      {/* Main content - responsive behavior */}
+      <main className={`
+      w-full ${isSidebarOpen ? 'w-full md:ml-[25%] lg:ml-0' : 'w-[60%] xl:ml-2'}
+        transition-all duration-300 ease-in-out
+        h-screen overflow-hidden flex z-0
+      `}>
+        <div className="chat-interface-wrapper h-full">
           {activeChatId && (
             <ChatInterface 
               key={activeChatId}

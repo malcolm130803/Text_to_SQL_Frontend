@@ -15,7 +15,7 @@ interface ChatInterfaceProps {
   onUpdateChatTitle: (chatId: string, title: string) => void;
   currentChatTitle: string;
   onToggleVisualization?: (messageId: string, e: React.MouseEvent) => void;
-  style?: React.CSSProperties; // Add this line
+  style?: React.CSSProperties;
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
@@ -71,9 +71,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const handleToggleVisualization = (messageId: string, e: React.MouseEvent) => {
     e.preventDefault();
     if (onToggleVisualization) {
-      onToggleVisualization( messageId, e);
+      onToggleVisualization(messageId, e);
     } else {
-      // Fallback to local state management if prop not provided
       setLocalMessages(prev => prev.map(msg => 
         msg.id === messageId 
           ? { ...msg, showVisualization: !msg.showVisualization } 
@@ -86,38 +85,46 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     if (message.sender === 'bot' && message.sqlQuery) {
       return (
         <>
-          <p>{message.text}</p>
-          <div className="response-toggle-container">
-            <div className="response-toggle-buttons">
+          <p className="text-base md:text-lg">{message.text}</p>
+          <div className="response-toggle-container mt-2 md:mt-4">
+            <div className="response-toggle-buttons flex space-x-2">
               <button 
                 onClick={(e) => handleToggleVisualization(message.id, e)}
-                className={`toggle-btn ${!message.showVisualization ? 'active' : ''}`}
+                className={`toggle-btn px-3 py-1 text-sm md:px-4 md:py-2 md:text-base ${
+                  !message.showVisualization ? 'active' : ''
+                }`}
               >
                 Show Query
               </button>
               <button 
                 onClick={(e) => handleToggleVisualization(message.id, e)}
-                className={`toggle-btn ${message.showVisualization ? 'active' : ''}`}
+                className={`toggle-btn px-3 py-1 text-sm md:px-4 md:py-2 md:text-base ${
+                  message.showVisualization ? 'active' : ''
+                }`}
               >
                 Show Visualization
               </button>
             </div>
 
             {message.showVisualization ? (
-              <div className="visualization-container">
+              <div className="visualization-container mt-3 md:mt-4">
                 {message.visualization ? (
-                  <img src={message.visualization} alt="Data visualization" />
+                  <img 
+                    src={message.visualization} 
+                    alt="Data visualization" 
+                    className="w-full h-auto rounded-lg"
+                  />
                 ) : (
-                  <div className="visualization-placeholder">
+                  <div className="visualization-placeholder p-4 text-center">
                     Visualization would appear here
                   </div>
                 )}
               </div>
             ) : (
-              <div className="sql-query">
-                <pre>{message.sqlQuery}</pre>
+              <div className="sql-query mt-3 md:mt-4 relative">
+                <pre className="p-3 text-sm md:text-base overflow-x-auto">{message.sqlQuery}</pre>
                 <button 
-                  className="copy-sql-btn" 
+                  className="copy-sql-btn absolute top-2 right-2 px-2 py-1 text-xs md:text-sm" 
                   onClick={() => copySqlToClipboard(message.sqlQuery || '')}
                 >
                   Copy
@@ -128,7 +135,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </>
       );
     }
-    return <p>{message.text}</p>;
+    return <p className="text-base md:text-lg">{message.text}</p>;
   };
 
   const handleSendMessage = () => {
@@ -176,15 +183,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   return (
-    <div className={`chat-interface ${currentTheme}`}>
+    <div className={`chat-interface ${currentTheme} flex flex-col h-full`}>
       {/* Fixed App Header */}
-      <div className="app-header">
-        <h1 className="app-title">Text to SQL</h1>
+      <div className="app-header p-4">
+        <h1 className="app-title text-xl md:text-2xl font-bold">Text to SQL</h1>
       </div>
 
       {/* Chat Header with Action Buttons */}
-      <div className="chat-header">
-        <div className="chat-title-container">
+      <div className="chat-header p-4 flex items-center justify-between">
+        <div className="chat-title-container flex-1 mr-4">
           {isEditingTitle ? (
             <div className="title-edit-container">
               <input
@@ -194,7 +201,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 onKeyDown={(e) => e.key === 'Enter' && handleSaveTitle()}
                 onBlur={handleSaveTitle}
                 autoFocus
-                className="title-edit-input"
+                className="title-edit-input w-full p-2 rounded border"
                 aria-label="Edit chat title"
                 placeholder="Enter chat title"
                 title="Edit chat title"
@@ -202,7 +209,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             </div>
           ) : (
             <h3 
-              className="chat-title" 
+              className="chat-title text-lg md:text-xl font-medium truncate cursor-pointer" 
               onClick={() => setIsEditingTitle(true)}
             >
               {currentChatTitle.length > 30 
@@ -211,88 +218,105 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             </h3>
           )}
         </div>
-        <div className="action-buttons">
+        <div className="action-buttons flex space-x-2">
           <button 
             onClick={() => setIsEditingTitle(true)} 
-            className="action-btn" 
+            className="action-btn p-2 rounded-full hover:bg-opacity-20" 
             title="Edit Chat Title"
           >
-            <FiEdit />
+            <FiEdit className="text-lg" />
           </button>
-          <button onClick={onTranslate} className="action-btn" title="Translate">
-            <FiGlobe />
+          <button onClick={onTranslate} className="action-btn p-2 rounded-full hover:bg-opacity-20" title="Translate">
+            <FiGlobe className="text-lg" />
           </button>
-          <button onClick={onToggleTheme} className="action-btn" title="Toggle Theme">
-            {currentTheme === 'light' ? <FiMoon /> : <FiSun />}
+          <button onClick={onToggleTheme} className="action-btn p-2 rounded-full hover:bg-opacity-20" title="Toggle Theme">
+            {currentTheme === 'light' ? <FiMoon className="text-lg" /> : <FiSun className="text-lg" />}
           </button>
-          <button onClick={onProfileClick} className="action-btn" title="Profile">
-            <FiUser />
+          <button onClick={onProfileClick} className="action-btn p-2 rounded-full hover:bg-opacity-20" title="Profile">
+            <FiUser className="text-lg" />
           </button>
         </div>
       </div>
 
       {/* Chat Messages */}
-      <div className="chat-messages">
-        {localMessages.length === 0 ? (
-          <div className="welcome-message">
-            <p>Welcome to your new chat! Start typing to begin the conversation.</p>
-            <p>You can ask questions about your database schema or request SQL queries.</p>
+<div className="chat-messages flex-1 overflow-y-auto p-4 w-full md:w-4/5 lg:w-3/4 xl:w-2/3 mx-auto">
+  {localMessages.length === 0 ? (
+    <div className="welcome-message text-center p-8">
+      <p className="text-lg md:text-xl mb-2">Welcome to your new chat!</p>
+      <p className="text-gray-600 dark:text-gray-400">
+        Start typing to begin the conversation. You can ask questions about your database schema or request SQL queries.
+      </p>
+    </div>
+  ) : (
+    localMessages.map((message) => (
+      <div key={message.id} className={`message-wrapper ${message.sender} mb-4`}>
+        {message.sender === 'loading' ? (
+          <div className="message loading p-4 rounded-lg">
+            <div className="message-content">
+              <p className="text-gray-600 dark:text-gray-400">{message.text}</p>
+            </div>
           </div>
         ) : (
-          localMessages.map((message) => (
-            <div key={message.id} className={`message-wrapper ${message.sender}`}>
-              {message.sender === 'loading' ? (
-                <div className="message loading">
-                  <div className="message-content">
-                    <p>{message.text}</p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className={`message ${message.sender}`}>
-                    <div className="message-content">
-                      {renderBotMessageContent(message)}
-                      <span className="timestamp">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                  </div>
-
-                  {message.sender === 'bot' && message.showFeedback && (
-                    <div className="feedback-attached">
-                      <span className="feedback-prompt">Was this response helpful?</span>
-                      <div className="feedback-buttons">
-                        <button onClick={() => handleFeedback(message.id, 'up')}>👍</button>
-                        <button onClick={() => handleFeedback(message.id, 'down')}>👎</button>
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
+          <>
+            <div className={`message ${message.sender} max-w-[90%] md:max-w-[80%] ${message.sender === 'user' ? 'ml-auto' : ''}`}>
+              <div className={`message-content p-3 md:p-4 rounded-lg ${
+                message.sender === 'user' 
+                  ? 'bg-blue-100 dark:bg-blue-900' 
+                  : 'bg-gray-100 dark:bg-gray-700'
+              }`}>
+                {renderBotMessageContent(message)}
+                <span className="timestamp block text-xs text-right mt-1 opacity-70">
+                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
             </div>
-          ))
+
+            {message.sender === 'bot' && message.showFeedback && (
+              <div className="feedback-attached mt-1 ml-2">
+                <div className="feedback-buttons flex space-x-2">
+                  <button 
+                    onClick={() => handleFeedback(message.id, 'up')}
+                    className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                  >
+                    👍
+                  </button>
+                  <button 
+                    onClick={() => handleFeedback(message.id, 'down')}
+                    className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                  >
+                    👎
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
-        <div ref={messagesEndRef} />
       </div>
+    ))
+  )}
+  <div ref={messagesEndRef} />
+</div>
 
       {/* Chat Input */}
-      <div className="chat-input-container">
-        <input
-          type="text"
-          className="chat-input"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Type your SQL question here..."
-          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-          disabled={isBotThinking}
-        />
-        <button 
-          className="send-button" 
-          onClick={handleSendMessage}
-          disabled={isBotThinking || inputValue.trim() === ''}
-        >
-          Send
-        </button>
+      <div className="chat-input-container p-4 w-full md:w-4/5 lg:w-3/4 xl:w-2/3 mx-auto">
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            className="chat-input flex-1 p-3 rounded-lg border"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Type your SQL question here..."
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            disabled={isBotThinking}
+          />
+          <button 
+            className="send-button px-4 py-2 rounded-lg font-medium disabled:opacity-50"
+            onClick={handleSendMessage}
+            disabled={isBotThinking || inputValue.trim() === ''}
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );

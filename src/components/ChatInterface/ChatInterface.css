@@ -1,3 +1,4 @@
+/* In your ChatInterface.css */
 .chat-interface {
   display: flex;
   flex-direction: column;
@@ -5,6 +6,18 @@
   width: 100%;
   background: linear-gradient(to bottom, #3a3a6a, #2a2a5a);
   overflow: hidden;
+}
+
+/* Message Alignment Styles */
+.message-wrapper.user {
+  margin-left: auto;
+  max-width: 80%;
+}
+
+.message-content.user {
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 1rem 1rem 0 1rem;
 }
 
 /* Toggle Button Styles */
@@ -232,6 +245,7 @@
   background-color: #1a1a4a;
   color: #e0e0e0;
   border: 1px solid #4a4a8a;
+  border-radius: 1rem 1rem 0 1rem;
 }
 
 .chat-interface.dark .message.user .message-content {
@@ -246,6 +260,7 @@
   background-color: #f8f8f8;
   color: #333;
   border: 1px solid #e0e0e0;
+  border-radius: 1rem 1rem 1rem 0;
 }
 
 .chat-interface.dark .message.bot .message-content {
@@ -281,10 +296,10 @@
 
 /* Chat Input */
 .chat-input-container {
-  display: flex;
-  padding: 12px;
-  background: linear-gradient(to bottom, #2a2a5a, #1a1a4a);
-  border-top: 1px solid #5a5a9a;
+  width: 100%;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  border-top: 1px solid #e0e0e0;
 }
 
 .chat-interface.dark .chat-input-container {
@@ -302,6 +317,7 @@
   color: #333;
   font-size: 16px;
   margin-right: 10px;
+  width: calc(100% - 100px);
 }
 
 .chat-interface.dark .chat-input {
@@ -319,6 +335,7 @@
   transition: all 0.2s ease;
   border: 1px solid #5a5a9a;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 80px;
 }
 
 .send-button:hover {
@@ -399,5 +416,13 @@
 
   .app-title {
     font-size: 1.3rem;
+  }
+  
+  .chat-input {
+    width: calc(100% - 80px);
+  }
+  
+  .send-button {
+    width: 70px;
   }
 }

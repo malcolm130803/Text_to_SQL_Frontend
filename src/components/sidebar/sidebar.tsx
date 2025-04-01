@@ -55,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <div className={`sidebar ${isOpen ? "" : "collapsed"}`}>
+    <div className={`sidebar ${isOpen ? "" : "collapsed"} h-full ${isOpen ? 'w-full' : 'w-0'} sm:w-auto`}>
       <button onClick={toggleSidebar} className="toggle-btn">
         {isOpen ? <FiChevronLeft className="toggle-icon" /> : <FiMenu className="toggle-icon" />}
       </button>
@@ -126,4 +126,4 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-export { Sidebar }; 
+export { Sidebar };
