@@ -4,6 +4,7 @@ import { FiSun, FiMoon, FiGlobe, FiUser, FiEdit } from 'react-icons/fi';
 import { Message } from '../types';
 
 interface ChatInterfaceProps {
+  key: string;
   chatId: string;
   messages: Message[];
   onMessageSent: (chatId: string, message: Message) => void;
@@ -13,6 +14,8 @@ interface ChatInterfaceProps {
   currentTheme: 'light' | 'dark';
   onUpdateChatTitle: (chatId: string, title: string) => void;
   currentChatTitle: string;
+  onToggleVisualization?: (messageId: string, e: React.MouseEvent) => void;
+  style?: React.CSSProperties; // Add this line
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
@@ -24,17 +27,23 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   onProfileClick,
   currentTheme,
   onUpdateChatTitle,
-  currentChatTitle
+  currentChatTitle,
+  onToggleVisualization
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [isBotThinking, setIsBotThinking] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedTitle, setEditedTitle] = useState(currentChatTitle);
+  const [localMessages, setLocalMessages] = useState<Message[]>(messages);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollToBottom();
+    setLocalMessages(messages);
   }, [messages]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [localMessages]);
 
   useEffect(() => {
     setEditedTitle(currentChatTitle);
@@ -59,11 +68,74 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setIsEditingTitle(false);
   };
 
+  const handleToggleVisualization = (messageId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onToggleVisualization) {
+      onToggleVisualization( messageId, e);
+    } else {
+      // Fallback to local state management if prop not provided
+      setLocalMessages(prev => prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, showVisualization: !msg.showVisualization } 
+          : msg
+      ));
+    }
+  };
+
+  const renderBotMessageContent = (message: Message) => {
+    if (message.sender === 'bot' && message.sqlQuery) {
+      return (
+        <>
+          <p>{message.text}</p>
+          <div className="response-toggle-container">
+            <div className="response-toggle-buttons">
+              <button 
+                onClick={(e) => handleToggleVisualization(message.id, e)}
+                className={`toggle-btn ${!message.showVisualization ? 'active' : ''}`}
+              >
+                Show Query
+              </button>
+              <button 
+                onClick={(e) => handleToggleVisualization(message.id, e)}
+                className={`toggle-btn ${message.showVisualization ? 'active' : ''}`}
+              >
+                Show Visualization
+              </button>
+            </div>
+
+            {message.showVisualization ? (
+              <div className="visualization-container">
+                {message.visualization ? (
+                  <img src={message.visualization} alt="Data visualization" />
+                ) : (
+                  <div className="visualization-placeholder">
+                    Visualization would appear here
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="sql-query">
+                <pre>{message.sqlQuery}</pre>
+                <button 
+                  className="copy-sql-btn" 
+                  onClick={() => copySqlToClipboard(message.sqlQuery || '')}
+                >
+                  Copy
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      );
+    }
+    return <p>{message.text}</p>;
+  };
+
   const handleSendMessage = () => {
     if (inputValue.trim() === '' || isBotThinking) return;
-  
+
     const messageTimestamp = Date.now();
-  
+
     const userMessage: Message = {
       id: `msg-${messageTimestamp}-user`,
       text: inputValue,
@@ -71,7 +143,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       timestamp: new Date(messageTimestamp),
     };
     onMessageSent(chatId, userMessage);
-  
+    setLocalMessages(prev => [...prev, userMessage]);
+
     const loadingMessage: Message = {
       id: `msg-${messageTimestamp}-loading`,
       text: 'Generating SQL response...',
@@ -79,21 +152,25 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       timestamp: new Date(messageTimestamp + 1),
     };
     onMessageSent(chatId, loadingMessage);
-  
+    setLocalMessages(prev => [...prev, loadingMessage]);
+
     setInputValue('');
     setIsBotThinking(true);
-  
+
     setTimeout(() => {
       const botMessage: Message = {
         id: `msg-${messageTimestamp}-bot`,
-        text: `Based on your request, here's the SQL query:`,
+        text: `Here's the result for your query:`,
         sender: 'bot',
         timestamp: new Date(),
         showFeedback: true,
-        sqlQuery: `SELECT * FROM ${inputValue.toLowerCase().split(' ')[0] || 'users'} LIMIT 10;`
+        sqlQuery: `SELECT * FROM ${inputValue.toLowerCase().split(' ')[0] || 'users'} LIMIT 10;`,
+        visualization: 'https://via.placeholder.com/400x200?text=Sample+Visualization',
+        showVisualization: true
       };
-      
+
       onMessageSent(chatId, botMessage);
+      setLocalMessages(prev => [...prev.filter(m => m.id !== loadingMessage.id), botMessage]);
       setIsBotThinking(false);
     }, 1000);
   };
@@ -156,13 +233,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
       {/* Chat Messages */}
       <div className="chat-messages">
-        {messages.length === 0 ? (
+        {localMessages.length === 0 ? (
           <div className="welcome-message">
             <p>Welcome to your new chat! Start typing to begin the conversation.</p>
             <p>You can ask questions about your database schema or request SQL queries.</p>
           </div>
         ) : (
-          messages.map((message) => (
+          localMessages.map((message) => (
             <div key={message.id} className={`message-wrapper ${message.sender}`}>
               {message.sender === 'loading' ? (
                 <div className="message loading">
@@ -174,18 +251,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 <>
                   <div className={`message ${message.sender}`}>
                     <div className="message-content">
-                      <p>{message.text}</p>
-                      {message.sqlQuery && (
-                        <div className="sql-query">
-                          <pre>{message.sqlQuery}</pre>
-                          <button 
-                            className="copy-sql-btn" 
-                            onClick={() => copySqlToClipboard(message.sqlQuery || '')}
-                          >
-                            Copy SQL
-                          </button>
-                        </div>
-                      )}
+                      {renderBotMessageContent(message)}
                       <span className="timestamp">
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>

@@ -3,7 +3,8 @@
     width: 300px;
     background: 
         linear-gradient(135deg, #1e1e2e, #2a2a3a),
-        url('data:image/svg+xml;utf8,<svg opacity="0.03" xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><path d="M1 3h1v1H1V3zm2-2h1v1H3V1z"/></svg>');    color: #e0e0e0;
+        url('data:image/svg+xml;utf8,<svg opacity="0.03" xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><path d="M1 3h1v1H1V3zm2-2h1v1H3V1z"/></svg>');
+    color: #e0e0e0;
     padding: 16px;
     transition: width 0.3s ease-in-out;
     height: 100vh;
@@ -15,6 +16,8 @@
     left: 0;
     top: 0;
     overflow: hidden;
+    z-index: 1000;
+    margin: 0;
 }
 
 /* Sidebar Content */
@@ -24,9 +27,8 @@
     flex-grow: 1;
     justify-content: space-between;
     gap: 20px;
-    padding-top: 60px; /* Adjusted for spacing below toggle button */
-    padding-bottom: 100px; /* Ensures spacing at the bottom of sidebar */
-
+    padding-top: 60px;
+    padding-bottom: 100px;
 }
 
 /* Collapsed Sidebar */
@@ -61,7 +63,6 @@
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease-in-out;
     color: #e0e0e0;
-
 }
 
 .sidebar.collapsed .toggle-btn {
@@ -97,7 +98,7 @@
 
 /* Upload Section */
 .upload-section {
-    position: relative; /* Needed for absolute positioning of file input */
+    position: relative;
     margin-top: 5px; 
     padding: 15px;
     background: rgba(35, 35, 55, 0.8);
@@ -107,19 +108,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 50px; /* Adjust height as needed */
+    min-height: 50px;
     text-align: center;
 }
-    
-    .upload-section:hover {
-        background: rgba(45, 45, 65, 0.8);
-    }
+
+.upload-section:hover {
+    background: rgba(45, 45, 65, 0.8);
+}
+
 /* Chat History */
 .chat-history {
     margin-top: 10px;
-    padding-bottom: 50px; /* Adds space inside chat history */
+    padding-bottom: 50px;
 }
-
 
 /* Labels */
 .sidebar-label {
@@ -151,12 +152,11 @@
     transition: 0.3s;
 }
 
-
 .ddl-content textarea {
     height: 5px;
     min-height: 80px;
     max-height: 200px;
-    padding:1px; /* Adjust this value as needed */
+    padding:1px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 6px;
@@ -164,7 +164,6 @@
     color: #fff;
     resize: none;
 }
-
 
 .sidebar textarea::placeholder {
     color: rgba(255, 255, 255, 0.7);
@@ -176,6 +175,7 @@
     border-color: #5a5a5a;
     box-shadow: 0px 0px 5px rgba(90, 90, 90, 0.5);
 }
+
 .sidebar h3 {
     color: #d0d0ff;
     font-size: 15px;
@@ -184,15 +184,16 @@
     padding-bottom: 6px;
     margin-bottom: 12px;
 }
+
 /* File Input */
 .file-input {
     margin-top: 5px;
     width: 100%;
-    padding: 5px;  /* Adjust padding for better spacing */
+    padding: 5px;
     height: 100%; 
     position: absolute;
-    opacity: 0; /* Adjust this value to increase/decrease height */
-    line-height: 35px; /* Center text inside */
+    opacity: 0;
+    line-height: 35px;
     background: rgba(40, 40, 60, 0.8);
     border: 1px dashed #5a5a7a;
     border-radius: 4px;
@@ -202,11 +203,13 @@
     transition: all 0.3s ease;
     text-align: center;
 }
+
 .file-input:hover {
     background: rgba(50, 50, 70, 0.8);
     border-color: #6a6a8a;
 }
-/* New file input label */
+
+/* File Input Label */
 .file-input-label {
     display: block;
     width: 100%;
@@ -220,12 +223,12 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-  }
-  
-  .file-input-label:hover {
+}
+
+.file-input-label:hover {
     background: rgba(50, 50, 70, 0.8);
     border-color: #6a6a8a;
-  }
+}
 
 /* Chat History Scroll */
 .chat-history-list {
@@ -251,7 +254,8 @@
     margin-bottom: 6px;
     transition: background 0.3s ease;
     color: #e0e0e0;
-    border: 1px solid #3a3a3a;}
+    border: 1px solid #3a3a3a;
+}
 
 .chat-history li:hover {
     background: rgba(60, 60, 60, 0.8);
@@ -279,6 +283,7 @@
 .chat-history-list::-webkit-scrollbar {
     width: 6px;
 }
+
 .chat-history-list::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 6px;
@@ -287,7 +292,6 @@
 /* Collapsed Sidebar Icons */
 .collapsed-icons {
     display: none;
-
 }
 
 .sidebar.collapsed .sidebar-section {
@@ -331,249 +335,89 @@
     margin: 0;
     font-size: 16px;
 }
+
 /* Active Chat Highlight */
 .chat-history-list ul li button.active-chat {
     background: rgba(80, 80, 110, 0.8);
     border-color: #6a6a9a;
     font-weight: 500;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
-  
-  .chat-history-list ul li button.active-chat:hover {
+}
+
+.chat-history-list ul li button.active-chat:hover {
     background: rgba(255, 255, 255, 0.35);
-  }
-  
-  /* Welcome Message */
-  .welcome-message {
+}
+
+/* Welcome Message */
+.welcome-message {
     padding: 20px;
     text-align: center;
     color: rgba(255, 255, 255, 0.7);
     font-style: italic;
-  }
+}
 
+/* ===== ENHANCED RESPONSIVE ADDITIONS ===== */
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1100;
+    background: rgba(30, 30, 45, 0.9);
+    border: 1px solid #4a4a8a;
+    color: #e0e0e0;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    font-size: 20px;
+    cursor: pointer;
+}
 
-/* Responsive Sidebar Adjustments */
+/* Responsive Breakpoints */
+@media screen and (max-width: 1200px) {
+    .sidebar {
+        width: 250px;
+    }
+    .sidebar.collapsed {
+        width: 60px;
+    }
+}
 
+@media screen and (max-width: 992px) {
+    .sidebar {
+        width: 200px;
+    }
+    .sidebar-content {
+        padding-top: 50px;
+    }
+}
 
 @media screen and (max-width: 768px) {
     .sidebar {
-        width: 220px;
-    }
-    .sidebar-content {
-        gap: 10px;
-        padding-top: 30px;
-        padding-bottom: 60px;
-    }
-    .sidebar .toggle-btn {
-        top: 10px;
-        width: 40px;
-        height: 40px;
-        left: calc(100% - 40px);
-    }
-    .sidebar-section {
+        width: 60px;
         padding: 10px;
     }
-    .ddl-content {
-        margin-top: 30px;
+    .sidebar:not(.collapsed) {
+        width: 200px;
     }
-    .upload-section {
-        margin-top: 100px;
-        padding: 12px;
-        min-height: 80px;
-    }
-    .chat-history {
-        padding-bottom: 40px;
-    }
-    .sidebar-label {
-        font-size: 12px;
-        gap: 5px;
-    }
-    .icon {
-        font-size: 15px;
-    }
-    .sidebar textarea {
-        padding: 6px;
-        font-size: 12px;
-    }
-    .ddl-content textarea {
-        height: 120px;
-        font-size: 12px;
-        padding: 5px;
-    }
-    .file-input {
-        height: 60px;
-        line-height: 60px;
-        font-size: 13px;
-    }
-    .chat-history-list {
-        height: 140px;
-    }
-    .chat-history li {
-        padding: 8px;
-        font-size: 13px;
-    }
-    .chat-history input[type="checkbox"] {
-        margin-right: 5px;
+    .sidebar .toggle-btn {
+        left: 10px !important;
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 576px) {
     .sidebar {
-        width: 180px;
+        transform: translateX(-100%);
+        width: 240px;
     }
-    .sidebar-content {
-        gap: 8px;
-        padding-top: 20px;
-        padding-bottom: 40px;
-    }
-    .sidebar .toggle-btn {
-        top: 8px;
-        width: 38px;
-        height: 38px;
-        left: calc(100% - 38px);
-    }
-    .toggle-icon {
-        font-size: 18px;
+    .sidebar.visible {
+        transform: translateX(0);
     }
     .sidebar.collapsed {
-        width: 55px;
+        transform: translateX(-100%);
     }
-    .sidebar-section {
-        padding: 8px;
-    }
-    .ddl-content {
-        margin-top: 25px;
-    }
-    .upload-section {
-        margin-top: 80px;
-        padding: 10px;
-        min-height: 70px;
-    }
-    .chat-history {
-        padding-bottom: 30px;
-    }
-
-    .sidebar.collapsed .toggle-btn {
-        left: 5px;
-    }
-    
-    .sidebar-label {
-        font-size: 11px;
-        gap: 4px;
-    }
-    .icon {
-        font-size: 14px;
-    }
-    .sidebar textarea {
-        padding: 5px;
-        font-size: 11px;
-    }
-    .sidebar-section {
-        padding: 10px;
-    }
-    
-    .icon {
-        font-size: 20px;
-    }
-    
-    .ddl-content textarea {
-        height: 110px;
-        font-size: 11px;
-        padding: 4px;
-    }
-    
-    .file-input {
-        height: 55px;
-        line-height: 55px;
-        font-size: 12px;
-    }
-    
-    .chat-history-list {
-        height: 120px;
-    }
-    .chat-history li {
-        padding: 7px;
-        font-size: 12px;
-    }
-
-}
-
-@media screen and (max-width: 480px) {
-    .sidebar {
-        width: 140px;
-    }
-    .sidebar-content {
-        gap: 5px;
-        padding-top: 15px;
-        padding-bottom: 30px;
-    }
-    .sidebar .toggle-btn {
-        top: 6px;
-        width: 35px;
-        height: 35px;
-        left: calc(100% - 35px);
-    }
-    .sidebar.collapsed {
-        width: 50px;
-    }
-    
-    .sidebar .toggle-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 14px;
-    }
-
-    .sidebar-content {
-        gap: 10px;
-        padding-top: 30px;
-    }
-    .sidebar-section {
-        padding: 6px;
-        box-shadow: none; /* Reducing shadow for a cleaner mobile look */
-    }
-    .ddl-content {
-        margin-top: 20px;
-    }
-    .upload-section {
-        margin-top: 60px;
-        padding: 8px;
-        min-height: 60px;
-    }
-    .chat-history {
-        padding-bottom: 20px;
-    }
-    .chat-history h3 {
-        font-size: 14px;
-    }
-    .sidebar-label {
-        font-size: 10px;
-        gap: 3px;
-    }
-    .icon {
-        font-size: 13px;
-    }
-    .sidebar textarea {
-        padding: 4px;
-        font-size: 10px;
-    }
-    .ddl-content textarea {
-        height: 100px;
-        font-size: 10px;
-        padding: 3px;
-    }
-    .file-input {
-        height: 50px;
-        line-height: 50px;
-        font-size: 11px;
-    }
-    .chat-history-list {
-        height: 100px;
-    }
-    .chat-history li {
-        padding: 6px;
-        font-size: 11px;
-    }
-    .chat-history input[type="checkbox"] {
-        margin-right: 4px;
+    .mobile-menu-toggle {
+        display: block;
     }
 }

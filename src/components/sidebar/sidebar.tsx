@@ -1,4 +1,3 @@
-// sidebar.tsx
 import { useState } from 'react';
 import "./sidebar.css";
 import { FiUpload, FiFileText, FiChevronLeft, FiMenu, FiPlus } from "react-icons/fi";
@@ -17,6 +16,7 @@ interface SidebarProps {
   onNewChat: () => void;
   chats: Chat[];
   activeChatId: string;
+  className?: string;
   onToggleChatSelect: (chatId: string, selected: boolean) => void;
   onDdlContentChange: (content: string) => void;
   onFileUpload: (file: File) => void;
@@ -126,4 +126,4 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-export default Sidebar;
+export { Sidebar }; 

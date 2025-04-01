@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Sidebar from './components/sidebar/sidebar';
+import { Sidebar } from './components/sidebar/sidebar';
 import ChatInterface from './components/ChatInterface/chatinterface';
 import { Message, Chat } from './components/types';
 
 const App: React.FC = () => {
   const [activeChatId, setActiveChatId] = useState<string>('');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [chats, setChats] = useState<Chat[]>([]);
   const [nextChatNumber, setNextChatNumber] = useState(1);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -50,29 +50,46 @@ const App: React.FC = () => {
     ));
   };
 
+  const handleToggleVisualization = (messageId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    setChats(prev => prev.map(chat => {
+      if (chat.id === activeChatId) {
+        return {
+          ...chat,
+          messages: chat.messages.map(msg => 
+            msg.id === messageId 
+              ? { ...msg, showVisualization: !msg.showVisualization } 
+              : msg
+          )
+        };
+      }
+      return chat;
+    }));
+  };
+
   const handleMessageSent = (chatId: string, message: Message) => {
     setChats(prev => {
       const updatedChats = [...prev];
       const chatIndex = updatedChats.findIndex(chat => chat.id === chatId);
-      
+
       if (chatIndex === -1) return prev;
-      
+
       let newMessages = [...updatedChats[chatIndex].messages];
-      
+
       if (message.sender === 'loading') {
         newMessages = newMessages.filter(m => !m.id.includes('-loading'));
       }
       else if (message.sender === 'bot') {
         newMessages = newMessages.filter(m => !m.id.includes('-loading'));
       }
-      
+
       newMessages.push(message);
-      
+
       updatedChats[chatIndex] = {
         ...updatedChats[chatIndex],
         messages: newMessages
       };
-      
+
       if (updatedChats[chatIndex].title === 'New Chat' && message.sender === 'user') {
         updatedChats[chatIndex].title = `Chat ${nextChatNumber}: ${
           message.text.length > 30 
@@ -81,7 +98,7 @@ const App: React.FC = () => {
         }`;
         setNextChatNumber(n => n + 1);
       }
-      
+
       return updatedChats;
     });
   };
@@ -110,9 +127,19 @@ const App: React.FC = () => {
     const activeChat = chats.find(chat => chat.id === activeChatId);
     return activeChat ? activeChat.messages : [];
   };
+  useEffect(()=>{
+    console.log(isSidebarOpen)
+  },[])
 
   return (
-    <div className={`app-container ${theme}`}>
+    <div className={`app-container ${theme} w-full`}>
+     {/* <button 
+          className="mobile-menu-toggle w-[10%]"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        ☰
+      </button> */}
+      <div className={`${isSidebarOpen? 'w-[30%]':'w-[10%]'}`}>
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
@@ -124,23 +151,27 @@ const App: React.FC = () => {
         onDdlContentChange={handleDdlContentChange}
         onFileUpload={handleFileUpload}
       />
-
-      <div className={`chat-section ${isSidebarOpen ? 'expanded' : 'collapsed'}`}>
-        {activeChatId && (
-          <ChatInterface 
-            key={activeChatId}
-            chatId={activeChatId}
-            messages={getActiveChatMessages()}
-            onMessageSent={handleMessageSent}
-            onTranslate={handleTranslate}
-            onToggleTheme={handleToggleTheme}
-            onProfileClick={handleProfileClick}
-            currentTheme={theme}
-            onUpdateChatTitle={handleUpdateChatTitle}
-            currentChatTitle={chats.find(chat => chat.id === activeChatId)?.title || 'New Chat'}
-          />
-        )}
       </div>
+
+      <main className={`main-content ${isSidebarOpen ? 'sidebar-open w-[70%]' : 'sidebar-collapsed w-[90%]'}`}>
+        <div className="chat-interface-wrapper">
+          {activeChatId && (
+            <ChatInterface 
+              key={activeChatId}
+              chatId={activeChatId}
+              messages={getActiveChatMessages()}
+              onMessageSent={handleMessageSent}
+              onTranslate={handleTranslate}
+              onToggleTheme={handleToggleTheme}
+              onProfileClick={handleProfileClick}
+              currentTheme={theme}
+              onUpdateChatTitle={handleUpdateChatTitle}
+              currentChatTitle={chats.find(chat => chat.id === activeChatId)?.title || 'New Chat'}
+              onToggleVisualization={handleToggleVisualization}
+            />
+          )}
+        </div>
+      </main>
     </div>
   );
 };
